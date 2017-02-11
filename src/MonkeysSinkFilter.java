@@ -29,9 +29,11 @@ import java.util.Calendar;
 
 public class MonkeysSinkFilter extends FilterFramework {
     private String fileName;
-    public MonkeysSinkFilter(String fileName){
+
+    public MonkeysSinkFilter(String fileName) {
         this.fileName = fileName;
     }
+
     public void run() {
         /************************************************************************************
          *	TimeStamp is used to compute time using java.util's Calendar class.
@@ -136,9 +138,8 @@ public class MonkeysSinkFilter extends FilterFramework {
                  // in.
                  ****************************************************************************/
                 //TODO: save file instead of displaying
-                System.out.print(TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement));
-
-                System.out.print("\n");
+                if (id != 0)
+                    System.out.println(TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement));
 
             } // try
 

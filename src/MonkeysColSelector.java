@@ -8,6 +8,7 @@ public class MonkeysColSelector extends FilterFramework {
     private List<Integer> columns;
 
     public MonkeysColSelector(List<Integer> columns) {
+        columns.add(0);
         this.columns = columns;
     }
 
