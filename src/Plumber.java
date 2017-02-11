@@ -27,8 +27,8 @@ public class Plumber
 		****************************************************************************/
 
 		SourceFilter Filter1 = new SourceFilter();
-		MiddleFilter Filter2 = new MiddleFilter();
-		SinkFilter Filter3 = new SinkFilter();
+		MiddleFilter Filter2 = new MonkeysConverter();
+		MonkeysSinkFilter Filter3 = new MonkeysSinkFilter();
 
 		/****************************************************************************
 		* Here we connect the filters starting with the sink filter (Filter 1) which
@@ -38,6 +38,7 @@ public class Plumber
 
 		Filter3.Connect(Filter2); // This esstially says, "connect Filter3 input port to Filter2 output port
 		Filter2.Connect(Filter1); // This esstially says, "connect Filter2 intput port to Filter1 output port
+	    Filter3.Connect(Filter1);
 
 		/****************************************************************************
 		* Here we start the filters up. All-in-all,... its really kind of boring.
