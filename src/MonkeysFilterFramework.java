@@ -1,5 +1,5 @@
 /******************************************************************************************************************
-* File:FilterFramework.java
+* File:MonkeysFilterFramework.java
 * Course: 17655
 * Project: Assignment 1
 * Copyright: Copyright (c) 2003 Carnegie Mellon University
@@ -22,12 +22,12 @@
 * OutputWritePort:	This the filter's output port. Essentially the filter's job is to read data from the input port,
 *					perform some operation on the data, then write the transformed data on the output port.
 *
-* FilterFramework:  This is a reference to the filter that is connected to the instance filter's input port. This
+* MonkeysFilterFramework:  This is a reference to the filter that is connected to the instance filter's input port. This
 *					reference is to determine when the upstream filter has stopped sending data along the pipe.
 *
 * Internal Methods:
 *
-*	public void Connect( FilterFramework Filter )
+*	public void Connect( MonkeysFilterFramework Filter )
 *	public byte ReadFilterInputPort()
 *	public void WriteFilterOutputPort(byte datum)
 *	public boolean EndOfInputStream()
@@ -36,19 +36,19 @@
 
 import java.io.*;
 
-public class FilterFramework extends Thread
+public class MonkeysFilterFramework extends Thread
 {
 	// Define filter input and output ports
 
 	private PipedInputStream InputReadPort = new PipedInputStream();
-	private PipedOutputStream OutputWritePort = new PipedOutputStream();
+	protected PipedOutputStream OutputWritePort = new PipedOutputStream();
 
 	// The following reference to a filter is used because java pipes are able to reliably
 	// detect broken pipes on the input port of the filter. This variable will point to
 	// the previous filter in the network and when it dies, we know that it has closed its
 	// output pipe and will send no more data.
 
-	private FilterFramework InputFilter;
+	private MonkeysFilterFramework InputFilter;
 
 	/***************************************************************************
 	* InnerClass:: EndOfStreamExeception
@@ -65,8 +65,8 @@ public class FilterFramework extends Thread
 	****************************************************************************/
 
 	class EndOfStreamException extends Exception {
-
-                static final long serialVersionUID = 0; // the version for streaming
+		
+		static final long serialVersionUID = 0; // the version for serializing
 
 		EndOfStreamException () { super(); }
 
@@ -82,7 +82,7 @@ public class FilterFramework extends Thread
 	* connected to another filter's output port through this method.
 	*
 	* Arguments:
-	* 	FilterFramework - this is the filter that this filter will connect to.
+	* 	MonkeysFilterFramework - this is the filter that this filter will connect to.
 	*
 	* Returns: void
 	*
@@ -90,7 +90,7 @@ public class FilterFramework extends Thread
 	*
 	****************************************************************************/
 
-	void Connect( FilterFramework Filter )
+	void Connect( MonkeysFilterFramework Filter )
 	{
 		try
 		{
@@ -103,7 +103,7 @@ public class FilterFramework extends Thread
 
 		catch( Exception Error )
 		{
-			System.out.println( "\n" + this.getName() + " FilterFramework error connecting::"+ Error );
+			System.out.println( "\n" + this.getName() + " MonkeysFilterFramework error connecting::"+ Error );
 
 		} // catch
 
@@ -136,9 +136,7 @@ public class FilterFramework extends Thread
 		* while we are waiting. If this happens and we do not check for the end of
 		* stream, then we could wait forever on an upstream pipe that is long gone.
 		* Unfortunately Java pipes do not throw exceptions when the input pipe is
-		* broken. So what we do here is to see if the upstream filter is alive.
-		* if it is, we assume the pipe is still open and sending data. If the
-		* filter is not alive, then we assume the end of stream has been reached.
+		* broken.
 		***********************************************************************/
 
 		try
@@ -306,4 +304,4 @@ public class FilterFramework extends Thread
 
 	} // run
 
-} // FilterFramework class
+} // MonkeysFilterFramework class

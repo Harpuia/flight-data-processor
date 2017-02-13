@@ -1,5 +1,5 @@
 /******************************************************************************************************************
- * File:SinkFilter.java
+ * File:SinkMonkeysFilter.java
  * Course: 17655
  * Project: Assignment 1
  * Copyright: Copyright (c) 2003 Carnegie Mellon University
@@ -27,10 +27,10 @@
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MonkeysSinkFilter extends FilterFramework {
+public class MonkeysSinkMonkeysFilter extends MonkeysFilterFramework {
     private String fileName;
 
-    public MonkeysSinkFilter(String fileName) {
+    public MonkeysSinkMonkeysFilter(String fileName) {
         this.fileName = fileName;
     }
 

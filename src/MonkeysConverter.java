@@ -4,7 +4,7 @@ import java.util.Calendar;
 /**
  * Created by yazid on 10-Feb-17.
  */
-public class MonkeysConverter extends MiddleFilter {
+public class MonkeysConverter extends MiddleMonkeysFilter {
     @Override
     public void run() {
         //Declarations
