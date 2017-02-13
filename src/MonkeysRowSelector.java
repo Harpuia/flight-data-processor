@@ -5,12 +5,6 @@ import java.util.List;
  */
 public class MonkeysRowSelector extends MonkeysFilterFramework {
     //Columns to keep
-    private List<Integer> columns;
-
-    public MonkeysRowSelector(List<Integer> columns) {
-        columns.add(0);
-        this.columns = columns;
-    }
 
     public void run() {
         int id;
@@ -35,14 +29,22 @@ public class MonkeysRowSelector extends MonkeysFilterFramework {
                     byteBuffer[i] = ReadFilterInputPort();
                 }
                 measurement = MonkeysByteManager.BytesToLong(byteBuffer);
-
                 //Filtering on row
-                if(id==2)
+                if(id == 0) {
+                    byteBuffer = MonkeysByteManager.IntToBytes(id);
+                    for(int i=0;i<IdLength;i++)
+                        WriteFilterOutputPort(byteBuffer[i]);
+                    //Writing the measurement
+                    byteBuffer = MonkeysByteManager.LongToBytes(measurement);
+                    for (int i = 0; i < MeasurementLength; i++)
+                        WriteFilterOutputPort(byteBuffer[i]);
+                }
+
+                if(id == 2)
                 {
-                   if(measurement<10000)
+                   if(Double.longBitsToDouble(measurement) < 10000)
 
                    {
-                       System.out.println(measurement);
                        //Writing the ID
                      byteBuffer = MonkeysByteManager.IntToBytes(id);
                        for(int i=0;i<IdLength;i++)
