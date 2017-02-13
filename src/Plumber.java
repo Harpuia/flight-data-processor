@@ -29,9 +29,9 @@ public class Plumber {
         List<Integer> columns = new ArrayList<Integer>();
         columns.add(2);
         columns.add(4);
-        MonkeysSourceMonkeysFilter Filter1 = new MonkeysSourceMonkeysFilter("FlightData.dat");
+        MonkeysSourceFilter Filter1 = new MonkeysSourceFilter("FlightData.dat");
         MonkeysColSelector Filter2 = new MonkeysColSelector(columns);
-        MonkeysSinkMonkeysFilter Filter3 = new MonkeysSinkMonkeysFilter("filename");
+        MonkeysSinkFilter Filter3 = new MonkeysSinkFilter("filename");
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (Filter 1) which
