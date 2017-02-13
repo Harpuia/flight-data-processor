@@ -26,11 +26,11 @@ public class MonkeysFrame {
         }
 
         this.time = dataFrame[0];
-        this.velocity = dataFrame[1];
-        this.altitude = dataFrame[2];
-        this.pressure = dataFrame[3];
-        this.temperature = dataFrame[4];
-        this.attitude = dataFrame[5];
+        this.velocity = Double.longBitsToDouble(dataFrame[1]);
+        this.altitude = Double.longBitsToDouble(dataFrame[2]);
+        this.pressure = Double.longBitsToDouble(dataFrame[3]);
+        this.temperature = Double.longBitsToDouble(dataFrame[4]);
+        this.attitude = Double.longBitsToDouble(dataFrame[5]);
     }
 
     public long[] toLongArray() {
