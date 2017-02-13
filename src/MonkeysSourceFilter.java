@@ -19,12 +19,22 @@
 
 import java.io.*; // note we must add this here since we use BufferedReader class to read from the keyboard
 
-public class SourceFilter extends FilterFramework
+public class MonkeysSourceFilter extends FilterFramework
 {
+	private String filename;
+
+
+	public MonkeysSourceFilter() {
+	}
+
+	public MonkeysSourceFilter(String filename) {
+		this.filename = filename;
+	}
+
 	public void run()
     {
 
-		String fileName = "FlightData.dat";	// Input data file.
+		String fileName = filename;	// Input data file.
 		int bytesread = 0;					// Number of bytes read from the input file.
 		int byteswritten = 0;				// Number of bytes written to the stream.
 		DataInputStream in = null;			// File stream reference.
