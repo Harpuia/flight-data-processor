@@ -19,15 +19,15 @@
 
 import java.io.*; // note we must add this here since we use BufferedReader class to read from the keyboard
 
-public class MonkeysSourceMonkeysFilter extends MonkeysFilterFramework
+public class MonkeysSourceFilter extends MonkeysFilterFramework
 {
 	private String filename;
 
 
-	public MonkeysSourceMonkeysFilter() {
+	public MonkeysSourceFilter() {
 	}
 
-	public MonkeysSourceMonkeysFilter(String filename) {
+	public MonkeysSourceFilter(String filename) {
 		this.filename = filename;
 	}
 
