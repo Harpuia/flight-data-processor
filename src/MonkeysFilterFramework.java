@@ -41,7 +41,7 @@ public class MonkeysFilterFramework extends Thread
 	// Define filter input and output ports
 
 	private PipedInputStream InputReadPort = new PipedInputStream();
-	private PipedOutputStream OutputWritePort = new PipedOutputStream();
+	protected PipedOutputStream OutputWritePort = new PipedOutputStream();
 
 	// The following reference to a filter is used because java pipes are able to reliably
 	// detect broken pipes on the input port of the filter. This variable will point to
