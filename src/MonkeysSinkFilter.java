@@ -27,10 +27,10 @@
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MonkeysSinkMonkeysFilter extends MonkeysFilterFramework {
+public class MonkeysSinkFilter extends MonkeysFilterFramework {
     private String fileName;
 
-    public MonkeysSinkMonkeysFilter(String fileName) {
+    public MonkeysSinkFilter(String fileName) {
         this.fileName = fileName;
     }
 
