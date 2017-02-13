@@ -3,7 +3,7 @@ import java.util.List;
 /**
  * Created by rachel on 10-Feb-17.
  */
-public class MonkeysColSelector extends FilterFramework {
+public class MonkeysColSelector extends MonkeysFilterFramework {
     //Columns to keep
     private List<Integer> columns;
 

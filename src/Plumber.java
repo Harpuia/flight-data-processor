@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /******************************************************************************************************************
@@ -30,9 +29,9 @@ public class Plumber {
         List<Integer> columns = new ArrayList<Integer>();
         columns.add(2);
         columns.add(4);
-        SourceFilter Filter1 = new SourceFilter();
+        MonkeysSourceMonkeysFilter Filter1 = new MonkeysSourceMonkeysFilter("FlightData.dat");
         MonkeysColSelector Filter2 = new MonkeysColSelector(columns);
-        MonkeysSinkFilter Filter3 = new MonkeysSinkFilter("filename");
+        MonkeysSinkMonkeysFilter Filter3 = new MonkeysSinkMonkeysFilter("filename");
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (Filter 1) which
