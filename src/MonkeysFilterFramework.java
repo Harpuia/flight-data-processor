@@ -162,7 +162,7 @@ public class MonkeysFilterFramework extends Thread
 
 				} //if
 
-				sleep(250);
+				//sleep(250);
 
 			} // while
 

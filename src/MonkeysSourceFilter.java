@@ -72,12 +72,12 @@ public class MonkeysSourceFilter extends MonkeysFilterFramework
 
 		catch ( EOFException eoferr )
 		{
-			System.out.println("\n" + this.getName() + "::End of file reached..." );
+			//System.out.println("\n" + this.getName() + "::End of file reached..." );
 			try
 			{
 				in.close();
 				ClosePorts();
-				System.out.println( "\n" + this.getName() + "::Read file complete, bytes read::" + bytesread + " bytes written: " + byteswritten );
+				//System.out.println( "\n" + this.getName() + "::Read file complete, bytes read::" + bytesread + " bytes written: " + byteswritten );
 
 			}
 		/***********************************************************************************
