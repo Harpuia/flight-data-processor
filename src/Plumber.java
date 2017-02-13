@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /******************************************************************************************************************
@@ -30,9 +29,13 @@ public class Plumber {
         List<Integer> columns = new ArrayList<Integer>();
         columns.add(2);
         columns.add(4);
-        SourceFilter Filter1 = new SourceFilter();
+        MonkeysSourceFilter Filter1 = new MonkeysSourceFilter("FlightData.dat");
         MonkeysColSelector Filter2 = new MonkeysColSelector(columns);
         MonkeysSinkFilter Filter3 = new MonkeysSinkFilter("filename");
+
+        MonkeysSourceFilter Source1 = new MonkeysSourceFilter ("SubSetA.dat");
+        MonkeysSourceFilter Source2 = new MonkeysSourceFilter ("SubSetB.dat");
+        MonkeysMerger Merger = new MonkeysMerger ();
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (Filter 1) which
@@ -40,17 +43,23 @@ public class Plumber {
          * source filter (Filter3).
          ****************************************************************************/
 
+
         Filter3.Connect(Filter2); // This esstially says, "connect Filter3 input port to Filter2 output port
         Filter2.Connect(Filter1); // This esstially says, "connect Filter2 intput port to Filter1 output port
         Filter3.Connect(Filter1);
-
-        /****************************************************************************
-         * Here we start the filters up. All-in-all,... its really kind of boring.
-         ****************************************************************************/
-
         Filter1.start();
         Filter2.start();
         Filter3.start();
+
+
+        /*
+        Merger.Connect(Source1);
+        Merger.Connect(Source2);
+        Filter3.Connect(Merger);
+        Source1.start();
+        Source2.start();
+        Filter3.start();
+        */
 
     } // main
 
