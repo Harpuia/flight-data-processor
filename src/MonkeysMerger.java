@@ -200,15 +200,12 @@ public class MonkeysMerger extends MonkeysFilterFramework
                     hasNext2 = false;
                 } else {
                     e.printStackTrace();
-                    break;
                 }
-                //ClosePorts();
-                //break;
             }
-
         } // while
 
         if (hasNext1) {
+            writeOneFrame(frameA);
             while(true) {
                 try {
                     byte databyte = ReadFilterInputPort(InputFilter1, InputReadPort1, 1);
@@ -219,8 +216,10 @@ public class MonkeysMerger extends MonkeysFilterFramework
                 }
             }
         } else if (hasNext2) {
+            writeOneFrame(frameB);
             while(true) {
                 try {
+
                     byte databyte = ReadFilterInputPort(InputFilter2, InputReadPort2, 2);
                     WriteFilterOutputPort(databyte);
                 } catch (EndOfStreamException e) {
