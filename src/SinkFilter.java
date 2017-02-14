@@ -1,5 +1,5 @@
 /******************************************************************************************************************
-* File:SinkMonkeysFilter.java
+* File:SinkFilter.java
 * Course: 17655
 * Project: Assignment 1
 * Copyright: Copyright (c) 2003 Carnegie Mellon University
@@ -26,7 +26,7 @@
 import java.util.*;						// This class is used to interpret time words
 import java.text.SimpleDateFormat;		// This class is used to format and write time in a string format.
 
-public class SinkMonkeysFilter extends MonkeysFilterFramework
+public class SinkFilter extends MonkeysFilterFramework
 {
 	public void run()
     {

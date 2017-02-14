@@ -1,5 +1,5 @@
 /******************************************************************************************************************
-* File:MiddleMonkeysFilter.java
+* File:MiddleFilter.java
 * Course: 17655
 * Project: Assignment 1
 * Copyright: Copyright (c) 2003 Carnegie Mellon University
@@ -18,7 +18,7 @@
 *
 ******************************************************************************************************************/
 
-public class MiddleMonkeysFilter extends MonkeysFilterFramework
+public class MiddleFilter extends MonkeysFilterFramework
 {
 	public void run()
     {
