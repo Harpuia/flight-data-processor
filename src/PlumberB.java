@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yazid on 14-Feb-17.
+ * System B pipe-and -filter
  */
 public class PlumberB {
     public static void main(String argv[]) {
@@ -45,6 +45,7 @@ public class PlumberB {
             SinkWildPoints.Connect(ColSelectorWildpoints);
             ColSelectorWildpoints.Connect(WildDetector);
             WildDetector.Connect(Splitter);
+
             //Starting filters
             Source.start();
             Converter.start();
