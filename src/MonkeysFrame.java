@@ -1,5 +1,7 @@
 /**
  * Created by Yuchao on 10/02/2017.
+ * MonkeysFrame stores data of one sample.
+ * It includes time, velocity, altitude, pressure, temperature and attitude.
  */
 public class MonkeysFrame {
     long time;
@@ -9,6 +11,7 @@ public class MonkeysFrame {
     double temperature;
     double attitude;
 
+    /* This is a const variable storing how many types of data there are in one frame. */
     final int frameCol = 6;
 
     public MonkeysFrame(long time, double velocity, double altitude, double pressure, double temperature, double attitude) {
@@ -20,6 +23,7 @@ public class MonkeysFrame {
         this.attitude = attitude;
     }
 
+    /* A customized constructor that takes a long typed array of data and store them in the object. */
     public MonkeysFrame(long[] dataFrame) {
         if(dataFrame.length < 6) {
             return;
@@ -33,6 +37,7 @@ public class MonkeysFrame {
         this.attitude = Double.longBitsToDouble(dataFrame[5]);
     }
 
+    /* This methods output all the data in a long typed array. */
     public long[] toLongArray() {
         long[] frameData = new long[frameCol];
         frameData[0] = time;
