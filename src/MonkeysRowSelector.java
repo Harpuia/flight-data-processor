@@ -1,59 +1,70 @@
-import java.util.List;
-
 /**
- * Created by rachel on 2/12/17.
+ * Created by yazid on 13-Feb-17.
  */
-public class MonkeysRowSelector extends MonkeysFilterFramework {
-    //Columns to keep
+public class MonkeysRowSelector extends MonkeysWildpointFramework {
+    /**
+     * Constants
+     **/
+    private final int FrameSize = 6;
+    private final int MeasurementLength = 8;
+    private final int IdLength = 4;
 
+    //TODO: place this in MonkeysFilter Framework
+
+    /**
+     * Reads a frame from input
+     *
+     * @return MonkeysFrame object read from input
+     * @throws EndOfStreamException
+     */
+    private MonkeysFrame ReadFrame() throws EndOfStreamException {
+        //Reading frame data
+        long[] frameData = new long[FrameSize];
+        for (int i = 0; i < FrameSize; i++) {
+            byte[] byteBuffer = new byte[MeasurementLength];
+
+            for (int j = 0; j < IdLength; j++) {
+                ReadFilterInputPort();
+            }
+
+            for (int j = 0; j < MeasurementLength; j++) {
+                byteBuffer[j] = ReadFilterInputPort();
+            }
+            frameData[i] = MonkeysByteManager.BytesToLong(byteBuffer);
+        }
+        return new MonkeysFrame(frameData);
+    }
+
+    /**
+     * Writes frame to the output of the filter
+     *
+     * @param frame frame to write to the output
+     */
+    private void WriteFrame(MonkeysFrame frame) {
+        long[] frameData = frame.toLongArray();
+        for (int i = 0; i < FrameSize; i++) {
+            byte[] byteBuffer = MonkeysByteManager.IntToBytes(i);
+            for (int j = 0; j < byteBuffer.length; j++) {
+                WriteFilterOutputPort(byteBuffer[j]);
+            }
+
+            byteBuffer = MonkeysByteManager.LongToBytes(frameData[i]);
+            for (int j = 0; j < byteBuffer.length; j++) {
+                WriteFilterOutputPort(byteBuffer[j]);
+            }
+        }
+    }
+
+    //We are assuming the first point is always valid (since we won't have any way of extrapolating if this is not the case)
+    @Override
     public void run() {
-        int id;
-        long measurement;
-        int IdLength = 4;
-        int MeasurementLength = 8;
-        byte[] byteBuffer;
-
-
+        //TODO: handle case where first point or last point are wild points
+        MonkeysFrame frame = null;
         while (true) {
             try {
-                //Reading id
-                byteBuffer = new byte[IdLength];
-                for (int i = 0; i < IdLength; i++) {
-                    byteBuffer[i] = ReadFilterInputPort();
-                }
-                id = MonkeysByteManager.BytesToInt(byteBuffer);
-
-                //Reading measurement
-                byteBuffer = new byte[MeasurementLength];
-                for (int i = 0; i < MeasurementLength; i++) {
-                    byteBuffer[i] = ReadFilterInputPort();
-                }
-                measurement = MonkeysByteManager.BytesToLong(byteBuffer);
-                //Filtering on row
-                if(id == 0) {
-                    byteBuffer = MonkeysByteManager.IntToBytes(id);
-                    for(int i=0;i<IdLength;i++)
-                        WriteFilterOutputPort(byteBuffer[i]);
-                    //Writing the measurement
-                    byteBuffer = MonkeysByteManager.LongToBytes(measurement);
-                    for (int i = 0; i < MeasurementLength; i++)
-                        WriteFilterOutputPort(byteBuffer[i]);
-                }
-
-                if(id == 2)
-                {
-                   if(Double.longBitsToDouble(measurement) < 10000)
-
-                   {
-                       //Writing the ID
-                     byteBuffer = MonkeysByteManager.IntToBytes(id);
-                       for(int i=0;i<IdLength;i++)
-                           WriteFilterOutputPort(byteBuffer[i]);
-                       //Writing the measurement
-                       byteBuffer = MonkeysByteManager.LongToBytes(measurement);
-                       for (int i = 0; i < MeasurementLength; i++)
-                           WriteFilterOutputPort(byteBuffer[i]);
-                   }
+                frame = ReadFrame();
+                if (frame.altitude < 10000) {
+                    WriteFrame(frame);
                 }
             } catch (EndOfStreamException e) {
                 ClosePorts();
