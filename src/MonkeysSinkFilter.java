@@ -32,9 +32,10 @@ import java.util.Calendar;
 public class MonkeysSinkFilter extends MonkeysFilterFramework {
     private String fileName;
     private boolean displayWildPoints;
+
     public MonkeysSinkFilter(String fileName, boolean displayWildPoints) {
         this.fileName = fileName;
-        this.displayWildPoints=displayWildPoints;
+        this.displayWildPoints = displayWildPoints;
     }
 
     public void run() {
@@ -59,8 +60,8 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         int id;                            // This is the measurement id
         int i;                            // This is a loop counter
 
-        File file=null;
-        Writer writer=null;
+        File file = null;
+        Writer writer = null;
 
         try {
 
@@ -70,9 +71,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                     new OutputStreamWriter(
                             new FileOutputStream(file), "UTF-8"));
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
@@ -149,7 +148,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
 
                 if (id == 0) {
                     TimeStamp.setTimeInMillis(measurement);
-                    if(firstFrame) {
+                    if (firstFrame) {
                         firstFrame = false;
                     } else {
                         writer.write("\n");
@@ -170,13 +169,11 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                  ****************************************************************************/
                 //TODO: save file instead of displaying
                 //System.out.println(TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement));
-                else if(id==3 && displayWildPoints) {
+                else if (id == 3 && displayWildPoints && measurement < 0) {
                     writer.write(String.valueOf(new DecimalFormat("#0.00000").format(-Double.longBitsToDouble(measurement))) + "*\t");
 //                    writer.write(String.valueOf(Double.longBitsToDouble(measurement)) + "\n");
                     writer.flush();
-                }
-
-                else {
+                } else {
                     writer.write(String.valueOf(new DecimalFormat("#0.00000").format(Double.longBitsToDouble(measurement))) + "\t");
 //                    writer.write(String.valueOf(Double.longBitsToDouble(measurement)) + "\n");
                     writer.flush();
@@ -184,15 +181,9 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
 
                     // try
                 }
-            }
-            catch(IOException ioe)
-            {
+            } catch (IOException ioe) {
 
-            }
-
-
-            catch(EndOfStreamException e)
-            {
+            } catch (EndOfStreamException e) {
                 try {
                     writer.close();
                     ClosePorts();
@@ -204,10 +195,6 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
 
 
             } // catch
-
-
-
-
 
 
         } // while
