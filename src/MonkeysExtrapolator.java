@@ -70,6 +70,9 @@ public class MonkeysExtrapolator extends MonkeysWildpointFramework {
                     frame1 = ReadFrame();
                     frame2 = ReadFrame();
                     frame3 = ReadFrame();
+                    if(VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.FIRST){
+                        frame1.pressure = frame2.pressure;
+                    }
                     WriteFrame(frame1);
                 } else {
                     frame1 = frame2;
@@ -82,12 +85,15 @@ public class MonkeysExtrapolator extends MonkeysWildpointFramework {
                     //Write to the output
                     WriteFrame(frame2);
                 } else if (this.VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.SECOND) {
-                    frame2.pressure = (frame1.pressure + frame3.pressure) / 2;
+                    frame2.pressure = -(frame1.pressure + frame3.pressure) / 2; //Minus is used to communicate to the sink the fact that this was a wild point
                     //Write to the output
                     WriteFrame(frame2);
                 }
                 counter++;
             } catch (EndOfStreamException e) {
+                if(VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.SECOND){
+                    frame3.pressure = frame1.pressure;
+                }
                 WriteFrame(frame3);
                 ClosePorts();
                 break;
