@@ -35,11 +35,11 @@ public class PlumberC {
         MonkeysSourceFilter Source1 = new MonkeysSourceFilter("SubSetA.dat");
         MonkeysSourceFilter Source2 = new MonkeysSourceFilter("SubSetB.dat");
         MonkeysMerger Merger = new MonkeysMerger();
-        //MonkeysSplitter Splitter = new MonkeysSplitter();
-        //MonkeysRowSelector Selector = new MonkeysRowSelector();
-        //MonkeysWildDetector Detector = new MonkeysWildDetector();
-        MonkeysSinkFilter Sink1 = new MonkeysSinkFilter("MergerOutPut.txt", false);
-        //MonkeysSinkFilter Sink2 = new MonkeysSinkFilter("PressureWildPoints.txt", false);
+        MonkeysSplitter Splitter = new MonkeysSplitter();
+        MonkeysRowSelector Selector = new MonkeysRowSelector();
+        MonkeysWildDetector Detector = new MonkeysWildDetector();
+        MonkeysSinkFilter Sink1 = new MonkeysSinkFilter("LessThan10K.txt", false);
+        MonkeysSinkFilter Sink2 = new MonkeysSinkFilter("PressureWildPoints.txt", false);
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (Filter 1) which
@@ -48,28 +48,28 @@ public class PlumberC {
          ****************************************************************************/
 
         try {
-            /*
+
             Sink2.Connect(Detector);
             Sink1.Connect(Selector);
             Detector.Connect(Splitter);
             Selector.Connect(Splitter);
             Splitter.Connect(Merger);
             Merger.Connect(Source1, Source2);
-            */
-            Sink1.Connect(Merger);
-            Merger.Connect(Source1, Source2);
+
+
+
+            //Sink1.Connect(Merger);
+            //Merger.Connect(Source1, Source2);
             Source1.start();
             Source2.start();
             Merger.start();
-            /*
             Splitter.start();
             Selector.start();
             Detector.start();
-            */
             Sink1.start();
-            //Sink2.start();
+            Sink2.start();
             Sink1.join();
-            //Sink2.join();
+            Sink2.join();
         } catch (Exception e) {
             e.printStackTrace();
         }
