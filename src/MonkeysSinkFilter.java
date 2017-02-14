@@ -24,14 +24,17 @@
  *
  ******************************************************************************************************************/
 
+import java.io.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class MonkeysSinkFilter extends MonkeysFilterFramework {
     private String fileName;
-
-    public MonkeysSinkFilter(String fileName) {
+    private boolean displayWildPoints;
+    public MonkeysSinkFilter(String fileName, boolean displayWildPoints) {
         this.fileName = fileName;
+        this.displayWildPoints=displayWildPoints;
     }
 
     public void run() {
@@ -44,6 +47,8 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         Calendar TimeStamp = Calendar.getInstance();
         SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy MM dd::hh:mm:ss:SSS");
 
+        byte[] byteArray;
+
         int MeasurementLength = 8;        // This is the length of all measurements (including time) in bytes
         int IdLength = 4;                // This is the length of IDs in the byte stream
 
@@ -54,6 +59,24 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         int id;                            // This is the measurement id
         int i;                            // This is a loop counter
 
+        File file=null;
+        Writer writer=null;
+
+        try {
+
+            file = new File(fileName);
+
+            writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(file), "UTF-8"));
+
+        }
+        catch (Exception e)
+        {
+
+        }
+
+
         /*************************************************************
          *	First we announce to the world that we are alive...
          **************************************************************/
@@ -61,6 +84,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         System.out.print("\n" + this.getName() + "::Sink Reading ");
 
         while (true) {
+
             try {
                 /***************************************************************************
                  // We know that the first data coming to this filter is going to be an ID and
@@ -126,6 +150,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                 if (id == 0) {
                     TimeStamp.setTimeInMillis(measurement);
 
+
                 } // if
 
                 /****************************************************************************
@@ -138,23 +163,50 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                  // in.
                  ****************************************************************************/
                 //TODO: save file instead of displaying
-                if (id != 0)
-                    System.out.println(TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement));
+                //System.out.println(TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement));
+                else if(id==3 && displayWildPoints) {
+                    writer.write(TimeStampFormat.format(TimeStamp.getTime()) + "  " +String.valueOf(new DecimalFormat("#0.00000").format(-Double.longBitsToDouble(measurement))) + "* \n");
+//                    writer.write(String.valueOf(Double.longBitsToDouble(measurement)) + "\n");
+                    writer.flush();
+                }
 
-            } // try
+                else {
+                    writer.write(TimeStampFormat.format(TimeStamp.getTime()) + "  " +String.valueOf(new DecimalFormat("#0.00000").format(Double.longBitsToDouble(measurement))) + "\n");
+//                    writer.write(String.valueOf(Double.longBitsToDouble(measurement)) + "\n");
+                    writer.flush();
 
-            /*******************************************************************************
-             *	The EndOfStreamExeception below is thrown when you reach end of the input
-             *	stream (duh). At this point, the filter ports are closed and a message is
-             *	written letting the user know what is going on.
-             ********************************************************************************/ catch (EndOfStreamException e) {
-                ClosePorts();
-                System.out.print("\n" + this.getName() + "::Sink Exiting; bytes read: " + bytesread);
-                break;
+
+                    // try
+                }
+
+            }
+            catch(IOException ioe)
+            {
+
+            }
+
+
+            catch(EndOfStreamException e)
+            {
+                try {
+                    writer.close();
+                    ClosePorts();
+                    System.out.print("\n" + this.getName() + "::Sink Exiting; bytes read: " + bytesread);
+                    break;
+                } catch (IOException ioe) {
+
+                }
+
 
             } // catch
 
+
+
+
+
+
         } // while
+
 
     } // run
 
