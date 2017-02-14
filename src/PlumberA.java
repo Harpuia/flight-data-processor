@@ -21,17 +21,20 @@ import java.util.List;
  * Internal Methods:	None
  *
  ******************************************************************************************************************/
-public class Plumber {
+public class PlumberA {
     public static void main(String argv[]) {
         /****************************************************************************
          * Here we instantiate three filters.
          ****************************************************************************/
+
         List<Integer> columns = new ArrayList<Integer>();
         columns.add(2);
         columns.add(4);
-        MonkeysSourceFilter Filter1 = new MonkeysSourceFilter("FlightData.dat");
-        MonkeysColSelector Filter2 = new MonkeysColSelector(columns);
-        MonkeysSinkFilter Filter3 = new MonkeysSinkFilter("filename");
+
+        MonkeysSourceFilter Source = new MonkeysSourceFilter("FlightData.dat");
+        MonkeysConverter Converter = new MonkeysConverter();
+        MonkeysColSelector Selector = new MonkeysColSelector(columns);
+        MonkeysSinkFilter Sink = new MonkeysSinkFilter("outputA.txt", false);
 
         /****************************************************************************
          * Here we connect the filters starting with the sink filter (Filter 1) which
@@ -39,18 +42,17 @@ public class Plumber {
          * source filter (Filter3).
          ****************************************************************************/
 
-        Filter3.Connect(Filter2); // This esstially says, "connect Filter3 input port to Filter2 output port
-        Filter2.Connect(Filter1); // This esstially says, "connect Filter2 intput port to Filter1 output port
-        Filter3.Connect(Filter1);
-
-        /****************************************************************************
-         * Here we start the filters up. All-in-all,... its really kind of boring.
-         ****************************************************************************/
-
-        Filter1.start();
-        Filter2.start();
-        Filter3.start();
-
+        try {
+            Sink.Connect(Selector);
+            Selector.Connect(Converter);
+            Converter.Connect(Source);
+            Source.start();
+            Converter.start();
+            Selector.start();
+            Sink.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     } // main
 
 } // Plumber

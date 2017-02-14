@@ -82,7 +82,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
          **************************************************************/
 
         System.out.print("\n" + this.getName() + "::Sink Reading ");
-
+        boolean firstFrame = true;
         while (true) {
 
             try {
@@ -149,8 +149,14 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
 
                 if (id == 0) {
                     TimeStamp.setTimeInMillis(measurement);
-
-
+                    if(firstFrame) {
+                        firstFrame = false;
+                    } else {
+                        writer.write("\n");
+                        writer.flush();
+                    }
+                    writer.write(TimeStampFormat.format(TimeStamp.getTime()) + "\t");
+                    writer.flush();
                 } // if
 
                 /****************************************************************************
@@ -165,20 +171,19 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                 //TODO: save file instead of displaying
                 //System.out.println(TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement));
                 else if(id==3 && displayWildPoints) {
-                    writer.write(TimeStampFormat.format(TimeStamp.getTime()) + "  " +String.valueOf(new DecimalFormat("#0.00000").format(-Double.longBitsToDouble(measurement))) + "* \n");
+                    writer.write(String.valueOf(new DecimalFormat("#0.00000").format(-Double.longBitsToDouble(measurement))) + "*\t");
 //                    writer.write(String.valueOf(Double.longBitsToDouble(measurement)) + "\n");
                     writer.flush();
                 }
 
                 else {
-                    writer.write(TimeStampFormat.format(TimeStamp.getTime()) + "  " +String.valueOf(new DecimalFormat("#0.00000").format(Double.longBitsToDouble(measurement))) + "\n");
+                    writer.write(String.valueOf(new DecimalFormat("#0.00000").format(Double.longBitsToDouble(measurement))) + "\t");
 //                    writer.write(String.valueOf(Double.longBitsToDouble(measurement)) + "\n");
                     writer.flush();
 
 
                     // try
                 }
-
             }
             catch(IOException ioe)
             {
