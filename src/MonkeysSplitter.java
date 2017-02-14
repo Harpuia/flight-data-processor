@@ -2,24 +2,16 @@ import java.io.PipedOutputStream;
 
 /**
  *  MonkeysSplitter
- *  An filter class that own one additional PipedOutputStream.
+ *  A filter class that own one additional PipedOutputStream.
  *  You shall not do any data manipulating in this class.
- *
  */
 public class MonkeysSplitter extends MonkeysFilterFramework {
-
-    private static final int MAX_CONNECTED = 2;
-
     /** Member Variables **/
     private PipedOutputStream splitOutputWritePort = new PipedOutputStream();
-    private int connectedNum = 0;   // the number of connected output ports
-    private FilterFramework inputFilter;
-    private FilterFramework outputFilter1;
-    private FilterFramework outputFilter2;
+    private int connectedNum = 0;
 
     /** Constructor **/
     public MonkeysSplitter(){
-
     }
 
 
@@ -47,44 +39,40 @@ public class MonkeysSplitter extends MonkeysFilterFramework {
         }
     }
 
+    /**
+     * Override of the filter run method
+     */
     @Override
     public void run()
     {
-
-        int bytesread = 0;					// Number of bytes read from the input file.
-        int byteswritten = 0;				// Number of bytes written to the stream.
-        byte databyte = 0;					// The byte of data read from the file
-
-        // Next we write a message to the terminal to let the world know we are alive...
+        int bytesread = 0;
+        int byteswritten = 0;
+        byte databyte = 0;
 
         System.out.print( "\n" + this.getName() + "::The Splitter Reading ");
 
         while (true)
         {
-            /*************************************************************
-             *	Here we read a byte and write a byte
-             *************************************************************/
-
             try
             {
                 databyte = ReadFilterInputPort();
                 bytesread++;
                 this.WriteFilterOutputPort(databyte);
                 byteswritten++;
-
-            } // try
-
+            }
             catch (EndOfStreamException e)
             {
                 ClosePorts();
                 System.out.print( "\n" + this.getName() + ":: The Splitter Exiting; bytes read: " + bytesread + " bytes written: " + byteswritten );
                 break;
+            }
+        }
+    }
 
-            } // catch
-
-        } // while
-
-    } // run
+    /**
+     * Writes a data byte to the output port
+     * @param datum Byte to be written to the output
+     */
     @Override
     void WriteFilterOutputPort(byte datum){
         try
@@ -99,15 +87,11 @@ public class MonkeysSplitter extends MonkeysFilterFramework {
             }else{
                 System.out.println("No output now...");
             }
-
-        } // try
-
+        }
         catch( Exception Error )
         {
             System.out.println("\n" + this.getName() + " Splitter Pipe write error::" + Error );
-
-        } // catch
-
+        }
         return;
     }
 
