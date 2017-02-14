@@ -33,8 +33,8 @@ public class MonkeysWildpointFramework extends MonkeysFilterFramework {
      * @return Wildpoint enumerable (NO, FIRST, SECOND, BOTH
      */
     protected Wildpoint VerifyWildpoint(double pressure1, double pressure2){
-        boolean p2Wildpoint = VerifyWildpoint(pressure1);
-        boolean p1Wildpoint = VerifyWildpoint(pressure2);
+        boolean p1Wildpoint = VerifyWildpoint(pressure1);
+        boolean p2Wildpoint = VerifyWildpoint(pressure2);
         if(p1Wildpoint && !p2Wildpoint)
             return Wildpoint.FIRST;
         else if(p1Wildpoint && p2Wildpoint)
