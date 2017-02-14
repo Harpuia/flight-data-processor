@@ -170,18 +170,24 @@ public class MonkeysMerger extends MonkeysFilterFramework
     {
         //Declarations
         boolean hasNext1 = true, hasNext2 = true;
-
+        boolean firstTime = true;
+        MonkeysFrame frameA = null;
+        MonkeysFrame frameB = null;
         System.out.print( "\n" + this.getName() + "::Merging ");
         while (hasNext1 && hasNext2)
         {
             try
             {
-                MonkeysFrame frameA = readOneFrame(InputFilter1, InputReadPort1, 1);
-                MonkeysFrame frameB = readOneFrame(InputFilter2, InputReadPort2, 2);
+                if(firstTime) {
+                    frameA = readOneFrame(InputFilter1, InputReadPort1, 1);
+                    frameB = readOneFrame(InputFilter2, InputReadPort2, 2);
+                    firstTime = false;
+                }
                 if(frameA.time <= frameB.time) {
                     writeOneFrame(frameA);
                     frameA = readOneFrame(InputFilter1, InputReadPort1, 1);
                 } else {
+                    writeOneFrame(frameB);
                     frameB = readOneFrame(InputFilter2, InputReadPort2, 2);
                 }
             }
