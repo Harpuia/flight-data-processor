@@ -1,26 +1,32 @@
 import java.io.PipedOutputStream;
 
 /**
- *  MonkeysSplitter
- *  A filter class that own one additional PipedOutputStream.
- *  You shall not do any data manipulating in this class.
+ * MonkeysSplitter
+ * A filter class that own one additional PipedOutputStream.
+ * You shall not do any data manipulating in this class.
  */
 public class MonkeysSplitter extends MonkeysFilterFramework {
-    /** Member Variables **/
+    /**
+     * Member Variables
+     **/
     private PipedOutputStream splitOutputWritePort = new PipedOutputStream();
     private int connectedNum = 0;
 
-    /** Constructor **/
-    public MonkeysSplitter(){
+    /**
+     * Constructor
+     **/
+    public MonkeysSplitter() {
     }
 
 
-    /** Methods **/
+    /**
+     * Methods
+     **/
 
     /*
      * Add one on the counter
      */
-    public void AddOneConnected(){
+    public void AddOneConnected() {
         connectedNum += 1;
     }
 
@@ -30,11 +36,11 @@ public class MonkeysSplitter extends MonkeysFilterFramework {
      * @throws Exception
      */
     public PipedOutputStream getSplitOutputPort() throws Exception {
-        if(connectedNum == 0){
+        if (connectedNum == 0) {
             return super.OutputWritePort;
-        }else if(connectedNum == 1){
+        } else if (connectedNum == 1) {
             return splitOutputWritePort;
-        }else{
+        } else {
             throw new Exception("No accessible output port in splitter ");
         }
     }
@@ -43,27 +49,22 @@ public class MonkeysSplitter extends MonkeysFilterFramework {
      * Override of the filter run method
      */
     @Override
-    public void run()
-    {
+    public void run() {
         int bytesread = 0;
         int byteswritten = 0;
         byte databyte = 0;
 
-        System.out.print( "\n" + this.getName() + "::The Splitter Reading ");
+        System.out.print("\n" + this.getName() + "::The Splitter Reading ");
 
-        while (true)
-        {
-            try
-            {
+        while (true) {
+            try {
                 databyte = ReadFilterInputPort();
                 bytesread++;
                 this.WriteFilterOutputPort(databyte);
                 byteswritten++;
-            }
-            catch (EndOfStreamException e)
-            {
+            } catch (EndOfStreamException e) {
                 ClosePorts();
-                System.out.print( "\n" + this.getName() + ":: The Splitter Exiting; bytes read: " + bytesread + " bytes written: " + byteswritten );
+                System.out.print("\n" + this.getName() + ":: The Splitter Exiting; bytes read: " + bytesread + " bytes written: " + byteswritten);
                 break;
             }
         }
@@ -71,26 +72,24 @@ public class MonkeysSplitter extends MonkeysFilterFramework {
 
     /**
      * Writes a data byte to the output port
+     *
      * @param datum Byte to be written to the output
      */
     @Override
-    void WriteFilterOutputPort(byte datum){
-        try
-        {
-            if(connectedNum == 1){
-                OutputWritePort.write((int) datum );
-            }else if(connectedNum == 2){
-                OutputWritePort.write((int) datum );
+    protected void WriteFilterOutputPort(byte datum) {
+        try {
+            if (connectedNum == 1) {
+                OutputWritePort.write((int) datum);
+            } else if (connectedNum == 2) {
+                OutputWritePort.write((int) datum);
                 OutputWritePort.flush();
                 splitOutputWritePort.write((int) datum);
                 splitOutputWritePort.flush();
-            }else{
+            } else {
                 System.out.println("No output now...");
             }
-        }
-        catch( Exception Error )
-        {
-            System.out.println("\n" + this.getName() + " Splitter Pipe write error::" + Error );
+        } catch (Exception Error) {
+            System.out.println("\n" + this.getName() + " Splitter Pipe write error::" + Error);
         }
         return;
     }
@@ -99,14 +98,12 @@ public class MonkeysSplitter extends MonkeysFilterFramework {
      * Override the FilterFramework method to close the additional outputWritePort
      */
     @Override
-    public void ClosePorts()
-    {
+    public void ClosePorts() {
         super.ClosePorts();
-        try{
+        try {
             splitOutputWritePort.close();
-        }catch( Exception Error )
-        {
-            System.out.println( "\n" + this.getName() + " ClosePorts error::" + Error );
+        } catch (Exception Error) {
+            System.out.println("\n" + this.getName() + " ClosePorts error::" + Error);
 
         }
     }
