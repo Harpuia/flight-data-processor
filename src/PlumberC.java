@@ -26,7 +26,6 @@ public class PlumberC {
         MonkeysRowSelector SelectorLargerEqual10K = new MonkeysRowSelector(2, Utils.ComparisonOperator.LargerOrEqual, 10000);
         MonkeysWildDetector WildDetector = new MonkeysWildDetector();
 
-
         //Sinks
         MonkeysSinkFilter Sink1 = new MonkeysSinkFilter("outputC.txt", true);
         MonkeysSinkFilter Sink2 = new MonkeysSinkFilter("LessThan10K.txt", false);
@@ -44,7 +43,6 @@ public class PlumberC {
             Sink3.Connect(ColSelector);
             ColSelector.Connect(WildDetector);
             WildDetector.Connect(Splitter2);
-
 
             //Starting filters
             Source1.start();
