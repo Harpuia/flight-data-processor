@@ -5,7 +5,6 @@ public class MonkeysExtrapolator extends MonkeysWildpointFramework {
     //We are assuming there can't be two consecutive wildpoints
     @Override
     public void run() {
-        //TODO: handle case where first point or last point are wild points
         MonkeysFrame frame1 = null;
         MonkeysFrame frame2 = null;
         MonkeysFrame frame3 = null;
@@ -28,15 +27,15 @@ public class MonkeysExtrapolator extends MonkeysWildpointFramework {
                 }
 
                 //Testing frames
-                if (this.VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.NO) {
-                    //Write to the output
-                    WriteFrame(frame2);
-                } else if (this.VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.SECOND) {
+                if (this.VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.SECOND) {
                     frame2.pressure = -(frame1.pressure + frame3.pressure) / 2; //Minus is used to communicate to the sink the fact that this was a wild point
                     //Write to the output
                     WriteFrame(frame2);
+                } else {
+                    //Write to the output
+                    WriteFrame(frame2);
                 }
-                counter++;
+                    counter++;
             } catch (EndOfStreamException e) {
                 if(VerifyWildpoint(frame1.pressure, frame2.pressure) == Wildpoint.SECOND){
                     frame3.pressure = frame1.pressure;

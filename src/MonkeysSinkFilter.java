@@ -69,14 +69,12 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         System.out.print("\n" + this.getName() + "::Sink Reading ");
         boolean firstFrame = true;
         while (true) {
-
             try {
                 id = 0;
                 for (i = 0; i < IdLength; i++) {
                     databyte = ReadFilterInputPort();
                     id = id | (databyte & 0xFF);
-                    if (i != IdLength - 1)
-                    {
+                    if (i != IdLength - 1) {
                         id = id << 8;
                     }
                     bytesread++;
@@ -87,8 +85,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                     databyte = ReadFilterInputPort();
                     measurement = measurement | (databyte & 0xFF);
 
-                    if (i != MeasurementLength - 1)
-                    {
+                    if (i != MeasurementLength - 1) {
                         measurement = measurement << 8;
                     }
                     bytesread++;
@@ -103,8 +100,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                     }
                     writer.write(TimeStampFormat.format(TimeStamp.getTime()) + "\t");
                     writer.flush();
-                }
-                else if (id == 3 && displayWildPoints && measurement < 0) {
+                } else if (id == 3 && displayWildPoints && measurement < 0) {
                     writer.write(String.valueOf(new DecimalFormat("#0.00000").format(-Double.longBitsToDouble(measurement))) + "*\t");
                     writer.flush();
                 } else {
