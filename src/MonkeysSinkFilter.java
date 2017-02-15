@@ -31,14 +31,22 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class MonkeysSinkFilter extends MonkeysFilterFramework {
+    private final HashMap<Integer, String> headers = new HashMap<Integer, String>();
     private String fileName;
     private boolean displayWildPoints;
     private int[] columnsOrder;
-    private final HashMap<Integer, String> headers = new HashMap<Integer, String>();
 
+    /**
+     * Initialize the MonkeysSinkFilter class.
+     *
+     * @param fileName          the output file we should write data into.
+     * @param columnsOrder      the order of the data order.
+     * @param displayWildPoints the boolean type to show if the wild point should be dispalyed.
+     */
     public MonkeysSinkFilter(String fileName, int[] columnsOrder, boolean displayWildPoints) {
         this.fileName = fileName;
         this.displayWildPoints = displayWildPoints;
+        //Initializing the column order array.
         if (columnsOrder == null) {
             this.columnsOrder = new int[]{0, 1, 2, 3, 4, 5};
         } else {
@@ -53,6 +61,9 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         headers.put(5, "Attitude");
     }
 
+    /**
+     * The main function to write data into the output file.
+     */
     public void run() {
         Calendar TimeStamp = Calendar.getInstance();
         SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy MM dd::hh:mm:ss:SSS");
@@ -69,6 +80,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         File file = null;
         Writer writer = null;
 
+        //Starting writing data into the output file.
         try {
 
             file = new File(fileName);
@@ -79,7 +91,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
             //Printing header
             StringBuilder header = new StringBuilder();
             for (int i : columnsOrder) {
-                header.append(headers.get(i)+"\t");
+                header.append(headers.get(i) + "\t");
             }
             writer.write(header.toString());
             writer.flush();
@@ -87,11 +99,14 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
         }
 
         System.out.print("\n" + this.getName() + "::Sink Reading ");
+
+        //Creating a hash map to store the ID-measurement pair of the inputs.
         HashMap<Integer, Long> frame = new HashMap<Integer, Long>();
         int counter = 0;
         while (true) {
             try {
                 id = 0;
+                //Reading ID
                 for (int i = 0; i < IdLength; i++) {
                     dataByte = ReadFilterInputPort();
                     id = id | (dataByte & 0xFF);
@@ -101,7 +116,7 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
                     bytesRead++;
                 }
                 measurement = 0;
-
+                //Reading measurement
                 for (int i = 0; i < MeasurementLength; i++) {
                     dataByte = ReadFilterInputPort();
                     measurement = measurement | (dataByte & 0xFF);
@@ -140,14 +155,26 @@ public class MonkeysSinkFilter extends MonkeysFilterFramework {
 
     }
 
+    /**
+     * Print the measurement based on IDs.
+     *
+     * @param id              the int type ID of the input data.
+     * @param measurement     the long type measurement of the input data.
+     * @param writer          the writer object to write data into output file.
+     * @param timeStamp       the timestamp to show the time measurement.
+     * @param timeStampFormat the time stamp fomat of the time measurement.
+     */
     private void PrintMeasurement(int id, long measurement, Writer writer, Calendar timeStamp, SimpleDateFormat timeStampFormat) throws IOException {
+        //If the id equals 0, which means this is the time measurement, then we need to format it to output.
         if (id == 0) {
             timeStamp.setTimeInMillis(measurement);
             writer.write(timeStampFormat.format(timeStamp.getTime()) + "\t");
             writer.flush();
+            //If the id is 3, displayWildPoints is true, and measurement <0, we need to format the output as below.
         } else if (id == 3 && displayWildPoints && measurement < 0) {
             writer.write(String.valueOf(new DecimalFormat("#0.00000").format(-Double.longBitsToDouble(measurement))) + "*\t");
             writer.flush();
+            //Otherwise, format the output as below.
         } else {
             writer.write(String.valueOf(new DecimalFormat("#0.00000").format(Double.longBitsToDouble(measurement))) + "\t");
             writer.flush();
