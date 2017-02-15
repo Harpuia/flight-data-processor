@@ -1,25 +1,35 @@
 /**
- * Created by yazid on 13-Feb-17.
+ * Selects rows according to a comparison to a value applied to one column of the input stream
  */
 public class MonkeysRowSelector extends MonkeysFilterFramework {
-
+    //Attributes
     private int columnIndex;
     private Utils.ComparisonOperator operator;
     private double value;
 
+    /**
+     * Constructor of the MonkeysRowSelector class
+     * @param columnIndex index of the column to filter
+     * @param operator comparison operator
+     * @param value comparison value
+     */
     public MonkeysRowSelector(int columnIndex, Utils.ComparisonOperator operator, double value) {
         this.columnIndex = columnIndex;
         this.operator = operator;
         this.value = value;
     }
 
-    //We are assuming the first point is always valid (since we won't have any way of extrapolating if this is not the case)
+    /**
+     * Runs the filter
+     */
     @Override
     public void run() {
         MonkeysFrame frame = null;
         while (true) {
             try {
+                //Reading frame
                 frame = ReadFrame();
+                //Selecting column index, then operator for each case
                 switch (this.columnIndex) {
                     case 1:
                         switch(operator){
