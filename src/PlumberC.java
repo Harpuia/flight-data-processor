@@ -27,9 +27,9 @@ public class PlumberC {
         MonkeysWildDetector WildDetector = new MonkeysWildDetector();
 
         //Sinks
-        MonkeysSinkFilter Sink1 = new MonkeysSinkFilter("outputC.txt", true);
-        MonkeysSinkFilter Sink2 = new MonkeysSinkFilter("LessThan10K.txt", false);
-        MonkeysSinkFilter Sink3 = new MonkeysSinkFilter("PressureWildPoints.txt", false);
+        MonkeysSinkFilter Sink1 = new MonkeysSinkFilter("outputC.txt", null, true);
+        MonkeysSinkFilter Sink2 = new MonkeysSinkFilter("LessThan10K.txt", null, false);
+        MonkeysSinkFilter Sink3 = new MonkeysSinkFilter("PressureWildPoints.txt", new int[]{0, 3}, false);
         try {
             //Connecting filters
             Sink1.Connect(Extrapolator);

@@ -32,8 +32,8 @@ public class PlumberB {
         MonkeysColSelector ColSelectorWildpoints = new MonkeysColSelector(columnsWildpoints);
 
         //Sinks
-        MonkeysSinkFilter SinkExtrapolated = new MonkeysSinkFilter("outputB.txt", true);
-        MonkeysSinkFilter SinkWildPoints = new MonkeysSinkFilter("WildPoints.txt", false);
+        MonkeysSinkFilter SinkExtrapolated = new MonkeysSinkFilter("outputB.txt", new int[]{0, 4, 2, 3}, true);
+        MonkeysSinkFilter SinkWildPoints = new MonkeysSinkFilter("WildPoints.txt", new int[]{0, 3}, false);
 
         try {
             //Connecting filters

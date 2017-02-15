@@ -17,7 +17,7 @@ public class PlumberA {
         //Data processing
         MonkeysConverter Converter = new MonkeysConverter();
         MonkeysColSelector Selector = new MonkeysColSelector(columns);
-        MonkeysSinkFilter Sink = new MonkeysSinkFilter("outputA.txt", false);
+        MonkeysSinkFilter Sink = new MonkeysSinkFilter("outputA.txt", new int[]{0, 4, 2},false);
 
         try {
             //Connecting filters
