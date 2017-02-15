@@ -1,12 +1,16 @@
 import java.util.List;
 
 /**
- * Created by rachel on 10-Feb-17.
+ * A class that allows selecting certain columns from the input data
  */
 public class MonkeysColSelector extends MonkeysFilterFramework {
     //Columns to keep
     private List<Integer> columns;
 
+    /**
+     * Constructor of the MonkeyColSelector class
+     * @param columns A list of columns that will be selected and output
+     */
     public MonkeysColSelector(List<Integer> columns) {
         columns.add(0);
         this.columns = columns;
