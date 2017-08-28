@@ -1,1 +1,3 @@
-This is the repository for 17-655 2017 Spring.
+# Flight Data Processor
+
+This is a system to process flight data in real time built using a pipe-and-filter architectural style.
